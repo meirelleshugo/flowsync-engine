@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Deno cache and directories
+.deno/
+deno_dir/
+
+# Lock files
+deno.lock
+
+# Environment variables
+.env
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+
+# IDE/editor settings
+.vscode/
+.idea/
+
+# Test cache
+test_output/
