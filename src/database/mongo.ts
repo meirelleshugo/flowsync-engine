@@ -1,59 +1,46 @@
-import type { ConnectOptions as MongooseConnectOptions } from "mongoose";
 import { environment } from "../config/env.ts";
 import mongoose from "mongoose";
 
-const { mongoUri, mongoDbName, mongoUsername, mongoPassword } = environment;
+class MongoService {
+  private static instance: MongoService;
 
-export interface ConnectOptions extends MongooseConnectOptions {
-  sanitizeFilter?: boolean;
-  bufferCommands?: boolean;
-  autoCreate?: boolean;
-  autoIndex?: boolean;
-  dbName?: string;
-  user?: string;
-  pass?: string;
+  private connectionPromise: Promise<typeof mongoose> | null = null;
+
+  private constructor() {}
+
+  public static getInstance(): MongoService {
+    if (!MongoService.instance) {
+      MongoService.instance = new MongoService();
+    }
+    return MongoService.instance;
+  }
+
+  public async connect(): Promise<typeof mongoose> {
+    if (this.connectionPromise) {
+      return this.connectionPromise;
+    }
+
+    this.connectionPromise = mongoose.connect(environment.mongoUri, {
+      dbName: environment.mongoDbName,
+      user: environment.mongoUsername,
+      pass: environment.mongoPassword,
+      serverSelectionTimeoutMS: 5000,
+    });
+
+    await this.connectionPromise;
+
+    console.log(`Connected to MongoDB: ${environment.mongoDbName}`);
+
+    return mongoose;
+  }
+
+  public getDb() {
+    if (!mongoose.connection.db) {
+      throw new Error("MongoDB is not connected yet");
+    }
+
+    return mongoose.connection.db;
+  }
 }
 
-try {
-  const options: ConnectOptions = {
-    autoSelectFamilyAttemptTimeout: undefined,
-    allowPartialTrustChain: undefined,
-    serverSelectionTimeoutMS: 5000,
-    checkServerIdentity: undefined,
-    rejectUnauthorized: undefined,
-    autoSelectFamily: undefined,
-    secureProtocol: undefined,
-    ALPNProtocols: undefined,
-    secureContext: undefined,
-    localAddress: undefined,
-    servername: undefined,
-    sanitizeFilter: false,
-    passphrase: undefined,
-    bufferCommands: true,
-    ecdhCurve: undefined,
-    localPort: undefined,
-    minDHSize: undefined,
-    authSource: "admin",
-    dbName: mongoDbName,
-    user: mongoUsername,
-    pass: mongoPassword,
-    session: undefined,
-    ciphers: undefined,
-    lookup: undefined,
-    family: undefined,
-    hints: undefined,
-    autoCreate: true,
-    autoIndex: true,
-    cert: undefined,
-    crl: undefined,
-    key: undefined,
-    pfx: undefined,
-    ca: undefined,
-  };
-
-  await mongoose.connect(mongoUri, options);
-
-  console.log(`Connected to MongoDB Cluster via Mongoose: ${mongoDbName}`);
-} catch (err) {
-  throw err;
-}
+export const mongoService = MongoService.getInstance();
