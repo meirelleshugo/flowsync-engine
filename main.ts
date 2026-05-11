@@ -56,6 +56,35 @@ app.get("/api", (req: Request, res: Response) => {
 
 /**
  * @swagger
+ * /mongo:
+ *   get:
+ *     summary: Connect to mongo
+ *     responses:
+ *       200:
+ *         description: Successfully connected to MongoDB
+ */
+app.get("/mongo", async (req: Request, res: Response) => {
+  try {
+    const db = mongoService.getDb();
+
+    const collections = await db?.listCollections().toArray();
+
+    res.status(200).json({
+      db: db?.databaseName,
+      collections,
+    });
+  } catch (error) {
+    console.error(error);
+    console.log(error);
+
+    res.status(500).send({
+      message: "Failed to create dinosaur",
+    });
+  }
+});
+
+/**
+ * @swagger
  * /api/{dinosaur}:
  *   get:
  *     summary: Get a dinosaur by name
