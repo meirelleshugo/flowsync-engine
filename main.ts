@@ -115,11 +115,15 @@ app.get("/api/:dinosaur", (req: Request, res: Response) => {
   }
 });
 
-app.listen(8000);
+await mongoService.connect();
 
+app.listen(8000, () => {
 console.log(`
   ╔════════════════════════════════════════════════╗
   ║  Server running at http://localhost:8000       ║
   ║  Docs available at http://localhost:8000/docs  ║
   ╚════════════════════════════════════════════════╝
 `);
+});
+
+export default app;
