@@ -1,3 +1,4 @@
+import { mongoService } from "./src/database/mongo.ts";
 import { type Request, type Response } from "express";
 import data from "./data.json" with { type: "json" };
 import swaggerUi from "swagger-ui-express";
@@ -118,12 +119,12 @@ app.get("/api/:dinosaur", (req: Request, res: Response) => {
 await mongoService.connect();
 
 app.listen(8000, () => {
-console.log(`
-  ╔════════════════════════════════════════════════╗
-  ║  Server running at http://localhost:8000       ║
-  ║  Docs available at http://localhost:8000/docs  ║
-  ╚════════════════════════════════════════════════╝
-`);
+  console.log(`
+    ╔════════════════════════════════════════════════╗
+    ║  Server running at http://localhost:8000       ║
+    ║  Docs available at http://localhost:8000/docs  ║
+    ╚════════════════════════════════════════════════╝
+    `);
 });
 
 export default app;
