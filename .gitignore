@@ -2,8 +2,9 @@
 node_modules/
 
 # Deno cache and directories
-.deno/
+.deno_plugins/
 deno_dir/
+.deno/
 
 # Lock files
 deno.lock
