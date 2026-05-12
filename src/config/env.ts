@@ -8,6 +8,26 @@ const env = await load({
 class EnvService {
   private readonly variables = env;
 
+  public get jwtSecret(): string {
+    const value = this.variables.JWT_SECRET;
+
+    if (!value) {
+      throw new Error("JWT_SECRET is not defined");
+    }
+
+    return value;
+  }
+
+  public get jwtExpiresIn(): string {
+    const value = this.variables.JWT_EXPIRES_IN;
+
+    if (!value) {
+      throw new Error("JWT_EXPIRES_IN is not defined");
+    }
+
+    return value;
+  }
+
   public get mongoUri(): string {
     const value = this.variables.MONGO_URI;
 
