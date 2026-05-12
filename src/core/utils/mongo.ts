@@ -1,4 +1,4 @@
-import { environment } from "../config/env.ts";
+import { environment } from "../../config/env.ts";
 import mongoose from "mongoose";
 
 class MongoService {
