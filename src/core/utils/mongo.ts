@@ -1,6 +1,8 @@
 import { environment } from "../../config/env.ts";
 import mongoose from "mongoose";
 
+const { mongoUsername, mongoPassword, mongoDbName, mongoUri } = environment;
+
 class MongoService {
   private static instance: MongoService;
 
@@ -20,16 +22,18 @@ class MongoService {
       return this.connectionPromise;
     }
 
-    this.connectionPromise = mongoose.connect(environment.mongoUri, {
-      dbName: environment.mongoDbName,
-      user: environment.mongoUsername,
-      pass: environment.mongoPassword,
+    const options: mongoose.ConnectOptions = {
       serverSelectionTimeoutMS: 5000,
-    });
+      dbName: mongoDbName,
+      user: mongoUsername,
+      pass: mongoPassword,
+    };
+
+    this.connectionPromise = mongoose.connect(mongoUri, options);
 
     await this.connectionPromise;
 
-    console.log(`Connected to MongoDB: ${environment.mongoDbName}`);
+    console.log(`\nConnected to MongoDB: ${mongoDbName}`);
 
     return mongoose;
   }
