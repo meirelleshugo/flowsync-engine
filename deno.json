@@ -5,7 +5,7 @@
   "deno.enable": true,
   "deno.lint": true,
   "tasks": {
-    "dev": "deno run -N -R -E -S --env-file main.ts",
+    "dev": "deno run --watch -N -R -E -S --env-file ./src/main.ts",
     "test": "deno run -N -R -E -S --env-file test.ts"
   },
   "imports": {
