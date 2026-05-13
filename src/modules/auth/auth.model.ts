@@ -12,13 +12,8 @@ export default class AuthModel extends CoreModel<IAuth> {
   constructor(data?: Partial<IAuth>) {
     super();
 
-    if (data?.email) {
-      this._email = data.email;
-    }
-
-    if (data?.password) {
-      this._password = data.password;
-    }
+    if (data?.email) this._email = data.email;
+    if (data?.password) this._password = data.password;
   }
 
   get email(): string {

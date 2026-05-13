@@ -1,20 +1,29 @@
+import AuthRepository from "./auth.repository.ts";
+import UsersModel from "../users/users.model.ts";
 import throwlhos from "throwlhos";
-
-import AuthModel from "./auth.model.ts";
+import bcrypt from "bcryptjs";
 
 import { generateToken } from "../../core/utils/jwt.ts";
 
-export default class AuthService {
-  async login(auth: AuthModel): Promise<string> {
-    const isValidUser =
-      auth.email === "admin@flowsync.com" && auth.password === "123456";
+const repository = new AuthRepository();
 
-    if (!isValidUser) {
-      throw throwlhos.default.err_unauthorized("Credenciais inválidas.");
+export default class AuthService {
+  async login(auth: UsersModel): Promise<string> {
+    const user = await repository.findByEmail(auth);
+
+    if (!user) {
+      throw throwlhos.default.err_unauthorized("Usuário não encontrado.");
+    }
+
+    const isValidPassword = await bcrypt.compare(auth.password, user.password);
+
+    if (!isValidPassword) {
+      throw throwlhos.default.err_unauthorized("Senha inválida.");
     }
 
     return generateToken({
-      email: auth.email,
+      id: user.id,
+      email: user.email,
     });
   }
 }

@@ -1,6 +1,5 @@
-import { Router } from "express";
-
 import { authController } from "./auth.controller.ts";
+import { Router } from "express";
 
 const router = Router();
 
@@ -11,7 +10,7 @@ const router = Router();
  *     summary: User login
  *     tags:
  *       - Auth
- *     description: Authenticate user and return access credentials
+ *     description: Authenticate user and return JWT token
  *     requestBody:
  *       required: true
  *       content:
@@ -24,21 +23,36 @@ const router = Router();
  *             properties:
  *               email:
  *                 type: string
- *                 example: user@example.com
+ *                 example: admin@flowsync.com
  *               password:
  *                 type: string
- *                 example: yourpassword
+ *                 example: 123456
  *     responses:
  *       200:
- *         description: Login successful
+ *         description: Login realizado com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               type: object
  *               properties:
- *                 token:
+ *                 status:
  *                   type: string
- *                   example: jwt_token_here
+ *                   example: OK
+ *                 code:
+ *                   type: integer
+ *                   example: 200
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: Login realizado com sucesso!
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     token:
+ *                       type: string
+ *                       example: jwt_here
  *       401:
  *         description: Invalid credentials
  *       500:

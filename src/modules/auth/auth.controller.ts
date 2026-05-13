@@ -1,13 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
-
-import "responser";
-import throwlhos from "throwlhos";
-
 import BaseRules from "../../core/abstract/core.controller.ts";
-
-import AuthModel from "./auth.model.ts";
-
 import { AuthServiceImp } from "./index.ts";
+import AuthModel from "./auth.model.ts";
+import throwlhos from "throwlhos";
+import "responser";
 
 export default class AuthController extends BaseRules {
   login = async (request: Request, response: Response, next: NextFunction) => {
