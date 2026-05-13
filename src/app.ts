@@ -1,5 +1,5 @@
 import errorMiddleware from "./core/middlewares/error.middleware.ts";
-import dinosaurRoutes from "./modules/dinosaur/dinosaur.routes.ts";
+import usersRoutes from "./modules/users/users.routes.ts";
 import authRoutes from "./modules/auth/auth.routes.ts";
 import { swaggerUi, specs } from "./config/swagger.ts";
 import responser from "responser";
@@ -46,7 +46,7 @@ app.get("/", (_request, response) => {
 
 app.use("/auth", authRoutes);
 
-app.use("/dinosaurs", dinosaurRoutes);
+app.use("/users", usersRoutes);
 
 /**
  * ERROR MIDDLEWARE
