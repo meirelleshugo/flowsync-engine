@@ -1,5 +1,7 @@
 import requestCheck from "request-check";
 
-export default abstract class CoreController {
-  protected rules = requestCheck();
+const rc = requestCheck.default();
+
+export default abstract class BaseRules {
+  protected rc = rc;
 }

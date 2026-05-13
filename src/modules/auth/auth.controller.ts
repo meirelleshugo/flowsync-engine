@@ -3,19 +3,18 @@ import type { NextFunction, Request, Response } from "express";
 import "responser";
 import throwlhos from "throwlhos";
 
-import CoreController from "../../core/abstract/core.controller.ts";
+import BaseRules from "../../core/abstract/core.controller.ts";
 
 import AuthModel from "./auth.model.ts";
 
 import { AuthServiceImp } from "./index.ts";
 
-export default class AuthController extends CoreController {
+export default class AuthController extends BaseRules {
   login = async (request: Request, response: Response, next: NextFunction) => {
-    const email = request.body.email;
-    const password = request.body.password;
+    const { email, password } = request.body;
 
     try {
-      const invalids = this.rules.invalid({ email }, { password });
+      const invalids = this.rc.check({ email }, { password });
 
       if (invalids) {
         throw throwlhos.default.err_unprocessableEntity(

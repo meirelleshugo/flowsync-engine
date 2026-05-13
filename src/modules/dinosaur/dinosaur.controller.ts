@@ -15,7 +15,7 @@ export default class DinosaurController extends CoreController {
     const type = request.body.type;
 
     try {
-      const invalids = this.rules.invalid({ name }, { type });
+      const invalids = this.rc.check({ name }, { type });
 
       if (invalids) {
         throw throwlhos.default.err_unprocessableEntity(
@@ -64,7 +64,7 @@ export default class DinosaurController extends CoreController {
     const dinosaurId = request.params.dinosaurId;
 
     try {
-      const invalids = this.rules.invalid({ dinosaurId });
+      const invalids = this.rc.check({ dinosaurId });
 
       if (invalids) {
         throw throwlhos.default.err_unprocessableEntity(
@@ -90,7 +90,7 @@ export default class DinosaurController extends CoreController {
     const type = request.body.type;
 
     try {
-      const invalids = this.rules.invalid({
+      const invalids = this.rc.check({
         dinosaurId,
       });
 
@@ -128,7 +128,7 @@ export default class DinosaurController extends CoreController {
     const dinosaurId = request.params.dinosaurId;
 
     try {
-      const invalids = this.rules.invalid({ dinosaurId });
+      const invalids = this.rc.check({ dinosaurId });
 
       if (invalids) {
         throw throwlhos.default.err_unprocessableEntity(
@@ -156,7 +156,7 @@ export default class DinosaurController extends CoreController {
     const type = request.body.type;
 
     try {
-      const invalids = this.rules.default.invalid({ name }, { type });
+      const invalids = this.rc.check({ name }, { type });
 
       if (invalids) {
         throw throwlhos.default.err_unprocessableEntity(
