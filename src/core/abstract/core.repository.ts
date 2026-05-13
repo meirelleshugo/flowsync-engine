@@ -1,15 +1,9 @@
 import mongoose from "mongoose";
 
-export default abstract class CoreRepository<T> {
+export default abstract class CoreRepository<D> {
+  protected readonly mongoDB: mongoose.Model<D>;
 
-  protected mongoDB:
-    mongoose.Model<any>;
-
-  constructor(
-    mongoDB: mongoose.Model<any>,
-  ) {
-
-    this.mongoDB =
-      mongoDB;
+  constructor(mongoDB: mongoose.Model<D>) {
+    this.mongoDB = mongoDB;
   }
 }
