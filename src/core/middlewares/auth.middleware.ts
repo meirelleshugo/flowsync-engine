@@ -4,32 +4,26 @@ import throwlhos from "throwlhos";
 
 import { verifyToken } from "../utils/jwt.ts";
 
-const authMiddleware = async (
+export default function authMiddleware(
   request: Request,
-  _response: Response,
+  _: Response,
   next: NextFunction,
-) => {
+) {
   try {
-    const authorization = request.headers.authorization;
+    const bearer = request.headers.authorization;
 
-    if (!authorization) {
-      throw throwlhos.default.err_unauthorized("Token not provided.");
+    if (!bearer) {
+      throw throwlhos.default.err_unauthorized("Token não informado.");
     }
 
-    const [, token] = authorization.split(" ");
-
-    if (!token) {
-      throw throwlhos.default.err_unauthorized("Invalid token.");
-    }
+    const token = bearer.split(" ")[1];
 
     const decoded = verifyToken(token);
 
     request.user = decoded;
 
     next();
-  } catch (error) {
-    next(error);
+  } catch {
+    next(throwlhos.default.err_unauthorized("Token inválido."));
   }
-};
-
-export default authMiddleware;
+}
