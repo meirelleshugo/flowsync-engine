@@ -1,9 +1,287 @@
-import mongoose from "mongoose";
+import { SaveOptions } from "mongoose";
+import throwlhos from "throwlhos";
+import is from "@zarco/isness";
+import {
+  MongooseUpdateQueryOptions,
+  AggregateOptions,
+  ClientSession,
+  PipelineStage,
+  QueryOptions,
+  UpdateQuery,
+  FilterQuery,
+  Aggregate,
+  Model,
+  Types,
+} from "mongoose";
 
-export default abstract class CoreRepository<D> {
-  protected readonly mongoDB: mongoose.Model<D>;
+export type Pagination<T> = {
+  prevPage: number | null;
+  nextPage: number | null;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  totalPages: number;
+  totalDocs: number;
+  limit: number;
+  page: number;
+  data: T[];
+};
 
-  constructor(mongoDB: mongoose.Model<D>) {
-    this.mongoDB = mongoDB;
+export interface AggregatePaginateResult<T> {
+  nextPage?: number | null | undefined;
+  prevPage?: number | null | undefined;
+  meta?: number | boolean | T[] | null;
+  page?: number | undefined;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  totalPages: number;
+  totalDocs: number;
+  limit: number;
+  docs: T[];
+  [customLabel: string]: T[] | number | boolean | null | undefined;
+}
+
+interface CustomLabels<T = string | undefined | boolean> {
+  pagingCounter?: T | undefined;
+  hasNextPage?: T | undefined;
+  hasPrevPage?: T | undefined;
+  totalPages?: T | undefined;
+  totalDocs?: T | undefined;
+  nextPage?: T | undefined;
+  prevPage?: T | undefined;
+  limit?: T | undefined;
+  page?: T | undefined;
+  docs?: T | undefined;
+  meta?: T | undefined;
+}
+
+interface PaginateOptions {
+  customLabels?: CustomLabels | undefined;
+  allowDiskUse?: boolean | undefined;
+  sort?: object | string | undefined;
+  pagination?: boolean | undefined;
+  countQuery?: object | undefined;
+  useFacet?: boolean | undefined;
+  offset?: number | undefined;
+  limit?: number | undefined;
+  page?: number | undefined;
+}
+
+type AggregatePaginateModel<DocType> = Model<DocType> & {
+  aggregatePaginate?<T>(
+    query?: Aggregate<T[]>,
+    options?: PaginateOptions,
+    callback?: (err: unknown, result: AggregatePaginateResult<T>) => void,
+  ): Promise<AggregatePaginateResult<T>>;
+};
+
+export type ModelRef = { ref: string; select: string[] };
+
+export type ModelVirtuals<IModel, IModelVirtuals> = Model<
+  IModel,
+  Record<string, any>,
+  object,
+  IModelVirtuals
+>;
+
+export default class CoreRepository<
+  T,
+  TVirtuals = object,
+  TQueryHelpers = object,
+  TInstanceMethods = object,
+> {
+  model: Model<T, TQueryHelpers, TInstanceMethods, TVirtuals> & {
+    aggregatePaginate: AggregatePaginateModel<T>["aggregatePaginate"];
+  };
+  modelRefs?: ModelRef[];
+  constructor(
+    model: Model<T, TQueryHelpers, TInstanceMethods, TVirtuals>,
+    modelRefs?: ModelRef[],
+  ) {
+    this.model = model as Model<
+      T,
+      TQueryHelpers,
+      TInstanceMethods,
+      TVirtuals
+    > & { aggregatePaginate: AggregatePaginateModel<T>["aggregatePaginate"] };
+    this.modelRefs = modelRefs;
+  }
+  create(data: T, options?: SaveOptions) {
+    return this.model.create([data], options);
+  }
+
+  createOne(data: T, options?: SaveOptions) {
+    return this.model.create([data], options).then((docs) => docs?.[0]);
+  }
+
+  createMany(data: T[], options?: SaveOptions) {
+    return this.model.create(data, options);
+  }
+
+  findById(id: string | Types.ObjectId, options?: QueryOptions) {
+    if (!is.objectId(id)) {
+      throw throwlhos.default.err_internalServerError(
+        "findById requires a valid ObjectId",
+        {
+          givenId: id,
+          typeofGivenObjectId: typeof id,
+        },
+      );
+    }
+    const findById = this.model.findById(id, options);
+    this.modelRefs?.forEach((ref) => findById.populate(ref.ref, ref.select));
+    return findById;
+  }
+
+  findOne(query: FilterQuery<T>, options?: QueryOptions) {
+    const findOne = this.model.findOne(query, options);
+    this.modelRefs?.forEach((ref) => findOne.populate(ref.ref, ref.select));
+    return findOne;
+  }
+
+  findOneAndUpdate(
+    query: FilterQuery<T>,
+    update: UpdateQuery<T>,
+    options?: QueryOptions,
+  ) {
+    return this.model.findOneAndUpdate(query, update, options);
+  }
+
+  findMany(query: FilterQuery<T>, options?: QueryOptions) {
+    const findMany = this.model.find(query, options);
+    this.modelRefs?.forEach((ref) => findMany.populate(ref.ref, ref.select));
+    return findMany;
+  }
+
+  updateByIdWithSession(
+    id: string | Types.ObjectId,
+    update: UpdateQuery<T>,
+    session: ClientSession,
+    options?: MongooseUpdateQueryOptions,
+  ) {
+    if (!is.objectId(id)) {
+      throw throwlhos.default.err_internalServerError(
+        "updateByIdWithSession precisa de um ObjectId válido",
+        { givenId: id, typeofGivenObjectId: typeof id },
+      );
+    }
+    return this.model.findByIdAndUpdate(id, update, {
+      new: true,
+      runValidators: true,
+      session,
+      ...options,
+    });
+  }
+
+  updateById(
+    id: string | Types.ObjectId,
+    update: UpdateQuery<T>,
+    options?: MongooseUpdateQueryOptions,
+  ) {
+    if (!is.objectId(id)) {
+      throw throwlhos.default.err_internalServerError(
+        "updateById requires a valid ObjectId",
+        {
+          givenId: id,
+          typeofGivenObjectId: typeof id,
+        },
+      );
+    }
+    const findByIdAndUpdate = this.updateOne({ _id: id }, update, options);
+  }
+
+  updateOne(
+    updateQuery: FilterQuery<T>,
+    update: UpdateQuery<T>,
+    options?: MongooseUpdateQueryOptions,
+  ) {
+    const findAndUpdate = this.model.findOneAndUpdate(
+      updateQuery as FilterQuery<T>,
+      update,
+      {
+        new: true,
+        runValidators: true,
+        ...options,
+      },
+    );
+
+    this.modelRefs?.forEach((ref) =>
+      findAndUpdate.populate(ref.ref, ref.select),
+    );
+
+    return findAndUpdate;
+  }
+
+  updateMany(
+    updateQuery: FilterQuery<T>,
+    update: UpdateQuery<T>,
+    options?: MongooseUpdateQueryOptions,
+  ) {
+    const updateMany = this.model.updateMany(
+      updateQuery as FilterQuery<T>,
+      update,
+      {
+        new: true,
+        runValidators: true,
+        ...options,
+      },
+    );
+
+    return updateMany;
+  }
+
+  deleteById(
+    id: string | Types.ObjectId,
+    options?: MongooseUpdateQueryOptions,
+  ) {
+    const findByIdAndDelete = this.model.findByIdAndDelete(id, options);
+    this.modelRefs?.forEach((ref) =>
+      findByIdAndDelete.populate(ref.ref, ref.select),
+    );
+    return findByIdAndDelete;
+  }
+
+  deleteOne(query: FilterQuery<T>, options?: MongooseUpdateQueryOptions) {
+    const findOneAndDelete = this.model.findOneAndDelete(query, options);
+    this.modelRefs?.forEach((ref) =>
+      findOneAndDelete.populate(ref.ref, ref.select),
+    );
+    return findOneAndDelete;
+  }
+
+  findByIdAndUpdate(
+    id: Types.ObjectId,
+    update: UpdateQuery<T>,
+    options?: QueryOptions,
+  ) {
+    const findByIdAndUpdate = this.model.findByIdAndUpdate(id, update, {
+      new: true,
+      runValidators: true,
+      ...options,
+    });
+    return findByIdAndUpdate;
+  }
+  exists(query: FilterQuery<T>) {
+    return this.model.exists(query);
+  }
+
+  countDocuments(query: FilterQuery<T>) {
+    return this.model.countDocuments(query);
+  }
+
+  aggregate(aggregate: PipelineStage[], options?: AggregateOptions) {
+    return this.model.aggregate(aggregate, options);
+  }
+
+  paginate<D = T>(
+    aggregate: PipelineStage[],
+    options?: AggregateOptions & { paginate?: PaginateOptions },
+  ): Promise<AggregatePaginateResult<D>> {
+    const aggregateOptions = options || {};
+    const modelAggregate = this.model.aggregate(aggregate, aggregateOptions);
+    if (!this.model.aggregatePaginate) {
+      throw new Error("Model does not have aggregatePaginate method");
+    }
+    return this.model.aggregatePaginate(modelAggregate, options?.paginate);
   }
 }

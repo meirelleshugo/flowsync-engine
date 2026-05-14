@@ -1,65 +1,46 @@
 import CoreRepository from "../../core/abstract/core.repository.ts";
-import UsersModel from "./users.model.ts";
-import { IUser } from "./users.model.ts";
+import User, { IUser } from "./users.model.ts";
 import mongoose from "mongoose";
 
 export default class UsersRepository extends CoreRepository<IUser> {
-  private toModel(document: IUser): UsersModel {
-    return new UsersModel({
-      updatedAt: document.updatedAt,
-      createdAt: document.createdAt,
-      password: document.password,
-      email: document.email,
-      _id: document._id,
-    });
+  constructor() {
+    super(User);
   }
 
-  async create(data: Partial<IUser>): Promise<UsersModel | null> {
-    const document = await this.mongoDB.create(data);
-
-    if (!document) return null;
-
-    return this.toModel(document);
+  async createUser(data: Partial<IUser>) {
+    return await this.createOne(data);
   }
 
-  async findAll(): Promise<UsersModel[]> {
-    const documents = await this.mongoDB.find();
-
-    return documents.map((document) => this.toModel(document));
+  async findAllUsers() {
+    return await this.findMany({});
   }
 
-  async findById(id: string): Promise<UsersModel | null> {
+  async findUserById(id: string) {
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return null;
     }
 
-    const document = await this.mongoDB.findById(id);
-
-    if (!document) return null;
-
-    return this.toModel(document);
+    return await this.findById(id);
   }
 
-  async findByEmail(email: string): Promise<UsersModel | null> {
-    const document = await this.mongoDB.findOne({ email });
-
-    if (!document) return null;
-
-    return this.toModel(document);
+  async findUserByEmail(email: string) {
+    return await this.findOne({ email });
   }
 
-  async update(id: string, data: Partial<IUser>): Promise<UsersModel | null> {
-    const document = await this.mongoDB.findByIdAndUpdate(id, data, {
-      new: true,
-    });
+  async updateUser(id: string, data: Partial<IUser>) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return null;
+    }
 
-    if (!document) return null;
-
-    return this.toModel(document);
+    return await this.updateById(id, data);
   }
 
-  async delete(id: string): Promise<boolean> {
-    const document = await this.mongoDB.findByIdAndDelete(id);
+  async deleteUser(id: string) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return false;
+    }
+
+    const document = await this.deleteById(id);
 
     return !!document;
   }

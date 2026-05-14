@@ -1,73 +1,78 @@
-import UsersRepository from "./users.repository.ts";
-import { IUser } from "./users.model.ts";
-import throwlhos from "throwlhos";
-import bcrypt from "bcrypt";
+import CoreRepository from "../../core/abstract/core.repository.ts";
+import UsersModel, { IUser } from "./users.model.ts";
+import mongoose from "mongoose";
 
-const repository = new UsersRepository();
+export default class UsersRepository extends CoreRepository<IUser> {
+  constructor() {
+    super(UsersModel);
+  }
 
-export default class UsersService {
-  async create(email: string, password: string) {
-    const alreadyExists = await repository.findByEmail(email);
-
-    if (alreadyExists) {
-      throw throwlhos.default.err_conflict("Usuário já cadastrado.");
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    return await repository.create({
-      email,
-      password: hashedPassword,
+  private toModel(document: IUser): UsersModel {
+    return new UsersModel({
+      updatedAt: document.updatedAt,
+      createdAt: document.createdAt,
+      password: document.password,
+      email: document.email,
+      _id: document._id,
     });
   }
 
-  async findAll() {
-    return await repository.findAll();
+  async createUser(data: IUser): Promise<UsersModel | null> {
+    const document = await this.createOne(data);
+
+    if (!document) return null;
+
+    return this.toModel(document);
   }
 
-  async findById(id: string) {
-    const user = await repository.findById(id);
+  async findAllUsers(): Promise<UsersModel[]> {
+    const documents = await this.findMany({});
 
-    if (!user) {
-      throw throwlhos.default.err_notFound("Usuário não encontrado.");
-    }
-
-    return user;
+    return documents.map((document) => this.toModel(document));
   }
 
-  async findByEmail(email: string) {
-    const user = await repository.findByEmail(email);
-
-    if (!user) {
-      throw throwlhos.default.err_notFound("Usuário não encontrado.");
+  async findUserById(id: string): Promise<UsersModel | null> {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return null;
     }
 
-    return user;
+    const document = await super.findById(id);
+
+    if (!document) return null;
+
+    return this.toModel(document);
   }
 
-  async update(id: string, data: Partial<IUser>) {
-    if (data.password) {
-      data.password = await bcrypt.hash(data.password, 10);
-    }
+  async findUserByEmail(email: string): Promise<UsersModel | null> {
+    const document = await this.findOne({ email });
 
-    const updatedUser = await repository.update(id, data);
+    if (!document) return null;
 
-    if (!updatedUser) {
-      throw throwlhos.default.err_notFound("Usuário não encontrado.");
-    }
-
-    return updatedUser;
+    return this.toModel(document);
   }
 
-  async delete(id: string) {
-    const deleted = await repository.delete(id);
-
-    if (!deleted) {
-      throw throwlhos.default.err_notFound("Usuário não encontrado.");
+  async updateUser(
+    id: string,
+    data: Partial<IUser>,
+  ): Promise<UsersModel | null> {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return null;
     }
 
-    return {
-      message: "Usuário deletado com sucesso.",
-    };
+    const document = await this.updateById(id, data);
+
+    if (!document) return null;
+
+    return this.toModel(document);
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return false;
+    }
+
+    const document = await this.deleteById(id);
+
+    return !!document;
   }
 }

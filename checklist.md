@@ -31,11 +31,11 @@
 
 ## 🔐 4. Autenticação e Autorização (JWT)
 
-- [ ] Implementar autenticação com JWT
-- [ ] Criar endpoint de login
-- [ ] Gerar token JWT
-- [ ] Implementar middleware de autenticação (Bearer Token)
-- [ ] Proteger pelo menos 1 endpoint com autenticação
+- [x] Implementar autenticação com JWT
+- [x] Criar endpoint de login
+- [x] Gerar token JWT
+- [x] Implementar middleware de autenticação (Bearer Token)
+- [x] Proteger pelo menos 1 endpoint com autenticação
 - [ ] Configurar token no Postman como variável reutilizável
 - [ ] (Opcional) Implementar refresh token
 
@@ -58,17 +58,17 @@
 
 ## 📦 7. Pacotes Obrigatórios
 
-- [ ] Integrar responser (padronização de respostas)
+- [x] Integrar responser (padronização de respostas)
 - [ ] Integrar request-check (validação de payloads)
 - [x] Integrar morgan (logs de requisições)
 - [ ] Integrar isness (comparações de valores)
-- [ ] Integrar throwlhos (tratamento padrão de erros)
+- [x] Integrar throwlhos (tratamento padrão de erros)
 
 ## 🧾 8. Logs e Tratamento de Erros
 
 - [x] Configurar logs globais com morgan
 - [ ] Padronizar respostas com responser
-- [ ] Padronizar erros com throwlhos
+- [x] Padronizar erros com throwlhos
 - [x] Garantir logs de todas as requisições
 - [ ] Garantir consistência de erros na API
 
@@ -77,26 +77,26 @@
 - [ ] Criar README.md completo
 - [ ] Incluir passo a passo de instalação
 - [ ] Incluir instruções de execução do projeto
-- [ ] Listar todos os endpoints
-- [ ] Incluir exemplos de request/response
+- [x] Listar todos os endpoints
+- [x] Incluir exemplos de request/response
 - [ ] Incluir instruções para rodar testes
 - [ ] Publicar documentação da API (Postman / Swagger / outro)
 - [ ] Garantir acesso público à documentação
 
 ## 🧠 10. Boas Práticas (AGX)
 
-- [ ] Seguir padrões de código AGX
-- [ ] Organização clara de camadas (controller/service/repository)
-- [ ] Separação de responsabilidades
-- [ ] Código limpo e reutilizável
-- [ ] Evitar lógica no controller
+- [x] Seguir padrões de código AGX
+- [x] Organização clara de camadas (controller/service/repository)
+- [x] Separação de responsabilidades
+- [x] Código limpo e reutilizável
+- [x] Evitar lógica no controller
 
 ## 🚀 11. Entrega Final
 
-- [ ] Código versionado no GitHub
+- [x] Código versionado no GitHub
 - [ ] Projeto funcionando 100%
 - [ ] CRUD completo da entidade
-- [ ] Autenticação JWT funcional
+- [x] Autenticação JWT funcional
 - [ ] Transação implementada
 - [ ] Testes completos passando
 - [ ] Documentação publicada
