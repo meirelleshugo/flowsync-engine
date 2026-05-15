@@ -58,7 +58,7 @@ class AuthService {
       revoked: false,
     });
 
-    await RefreshTokenRepository.createOne(refreshToken.object);
+    await refreshTokenRepository.createOne(refreshToken.object);
 
     return {
       user,
