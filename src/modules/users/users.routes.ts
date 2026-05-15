@@ -1,6 +1,8 @@
-import authMiddleware from "../../core/middlewares/auth.middleware.ts";
-import { usersController } from "./users.controller.ts";
 import { Router } from "express";
+
+import controller from "./users.controller.ts";
+
+import authMiddleware from "../../core/middlewares/auth.middleware.ts";
 
 const router = Router();
 
@@ -8,7 +10,7 @@ const router = Router();
  * @swagger
  * tags:
  *   name: Users
- *   description: Users endpoints
+ *   description: User management
  */
 
 /**
@@ -16,8 +18,7 @@ const router = Router();
  * /users:
  *   post:
  *     summary: Create user
- *     tags:
- *       - Users
+ *     tags: [Users]
  *     requestBody:
  *       required: true
  *       content:
@@ -25,76 +26,81 @@ const router = Router();
  *           schema:
  *             type: object
  *             required:
+ *               - name
  *               - email
  *               - password
  *             properties:
+ *               name:
+ *                 type: string
+ *                 example: John Doe
  *               email:
  *                 type: string
+ *                 example: john@email.com
  *               password:
  *                 type: string
+ *                 example: 123456
  *     responses:
  *       201:
- *         description: User created
+ *         description: User created successfully
+ *       409:
+ *         description: User already exists
  */
-router.post("/", usersController.create);
+router.post("/", controller.create);
 
 /**
  * @swagger
  * /users:
  *   get:
- *     summary: List users
+ *     summary: Get all users
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     tags:
- *       - Users
  *     responses:
  *       200:
- *         description: Users list
+ *         description: Users retrieved successfully
+ *       401:
+ *         description: Unauthorized
  */
-router.get("/", authMiddleware, usersController.findAll);
+router.get("/", authMiddleware, controller.findAll);
 
 /**
  * @swagger
  * /users/{id}:
  *   get:
- *     summary: Find user by ID
+ *     summary: Get user by id
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     tags:
- *       - Users
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: User ID
+ *         example: 665ab12f9f1b1f4c2d111111
  *     responses:
  *       200:
- *         description: User found successfully
- *       401:
- *         description: Unauthorized
+ *         description: User retrieved successfully
  *       404:
  *         description: User not found
  */
-router.get("/:id", authMiddleware, usersController.findById);
+router.get("/:id", authMiddleware, controller.findById);
 
 /**
  * @swagger
  * /users/{id}:
  *   put:
  *     summary: Update user
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     tags:
- *       - Users
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: User ID
+ *         example: 665ab12f9f1b1f4c2d111111
  *     requestBody:
  *       required: true
  *       content:
@@ -102,46 +108,41 @@ router.get("/:id", authMiddleware, usersController.findById);
  *           schema:
  *             type: object
  *             properties:
+ *               name:
+ *                 type: string
+ *                 example: John Updated
  *               email:
  *                 type: string
- *                 example: admin@flowsync.com
- *               password:
- *                 type: string
- *                 example: 123456
+ *                 example: updated@email.com
  *     responses:
  *       200:
  *         description: User updated successfully
- *       401:
- *         description: Unauthorized
  *       404:
  *         description: User not found
  */
-router.put("/:id", authMiddleware, usersController.update);
+router.put("/:id", authMiddleware, controller.update);
 
 /**
  * @swagger
  * /users/{id}:
  *   delete:
  *     summary: Delete user
+ *     tags: [Users]
  *     security:
  *       - bearerAuth: []
- *     tags:
- *       - Users
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: User ID
+ *         example: 665ab12f9f1b1f4c2d111111
  *     responses:
  *       200:
  *         description: User deleted successfully
- *       401:
- *         description: Unauthorized
  *       404:
  *         description: User not found
  */
-router.delete("/:id", authMiddleware, usersController.delete);
+router.delete("/:id", authMiddleware, controller.delete);
 
 export default router;

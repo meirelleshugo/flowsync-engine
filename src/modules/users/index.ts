@@ -1,3 +1,3 @@
-import UsersService from "./users.service.ts";
+import routes from "./users.routes.ts";
 
-export const UsersRepositoryImp = new UsersService();
+export default routes;

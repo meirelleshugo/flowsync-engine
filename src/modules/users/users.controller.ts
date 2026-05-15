@@ -1,76 +1,42 @@
-import type { NextFunction, Request, Response } from "express";
-import BaseRules from "../../core/abstract/core.controller.ts";
-import UsersService from "./users.service.ts";
-import throwlhos from "throwlhos";
-import "responser";
+import { Request, Response } from "express";
 
-const service = new UsersService();
+import usersService from "./users.service.ts";
+import usersRules from "./users.schema.ts";
 
-export default class UsersController extends BaseRules {
-  create = async (request: Request, response: Response, next: NextFunction) => {
-    try {
-      const { email, password } = request.body;
+class UsersController {
+  async create(req: Request, res: Response) {
+    usersRules.create(req.body);
 
-      const invalids = this.rc.check({ email }, { password });
+    const result = await usersService.create(req.body);
 
-      if (invalids) {
-        throw throwlhos.default.err_unprocessableEntity(
-          "Campos inválidos.",
-          invalids,
-        );
-      }
+    return res.status(201).json(result);
+  }
 
-      const user = await service.create(email.toString(), password.toString());
+  async findAll(_req: Request, res: Response) {
+    const result = await usersService.findAll();
 
-      return response.send_created("Usuário criado com sucesso!", user);
-    } catch (error) {
-      next(error);
-    }
-  };
+    return res.status(200).json(result);
+  }
 
-  findAll = async (_: Request, response: Response, next: NextFunction) => {
-    try {
-      const users = await service.findAll();
+  async findById(req: Request, res: Response) {
+    const result = await usersService.findById(req.params.id);
 
-      return response.send_ok("Usuários encontrados.", users);
-    } catch (error) {
-      next(error);
-    }
-  };
+    return res.status(200).json(result);
+  }
 
-  findById = async (
-    request: Request,
-    response: Response,
-    next: NextFunction,
-  ) => {
-    try {
-      const user = await service.findById(request.params.id);
+  async update(req: Request, res: Response) {
+    usersRules.update(req.body);
 
-      return response.send_ok("Usuário encontrado.", user);
-    } catch (error) {
-      next(error);
-    }
-  };
+    const result = await usersService.update(req.params.id, req.body);
 
-  update = async (request: Request, response: Response, next: NextFunction) => {
-    try {
-      const user = await service.update(request.params.id, request.body);
+    return res.status(200).json(result);
+  }
 
-      return response.send_ok("Usuário atualizado.", user);
-    } catch (error) {
-      next(error);
-    }
-  };
+  async delete(req: Request, res: Response) {
+    const result = await usersService.delete(req.params.id);
 
-  delete = async (request: Request, response: Response, next: NextFunction) => {
-    try {
-      await service.delete(request.params.id);
-
-      return response.send_ok("Usuário removido.");
-    } catch (error) {
-      next(error);
-    }
-  };
+    return res.status(200).json(result);
+  }
 }
 
-export const usersController = new UsersController();
+export default new UsersController();

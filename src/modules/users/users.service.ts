@@ -1,78 +1,75 @@
-import CoreRepository from "../../core/abstract/core.repository.ts";
-import UsersModel, { IUser } from "./users.model.ts";
-import mongoose from "mongoose";
+import throwlhos from "throwlhos";
 
-export default class UsersRepository extends CoreRepository<IUser> {
-  constructor() {
-    super(UsersModel);
+import User from "../../models/user/User.ts";
+import UserRepository from "../../models/user/UserRepository.ts";
+
+const userRepository = new UserRepository();
+
+class UsersService {
+  async create(data: any) {
+    const alreadyExists = await userRepository.exists({
+      email: data.email,
+    });
+
+    if (alreadyExists) {
+      throw throwlhos.default.err_conflict("User already exists");
+    }
+
+    const user = new User({
+      ...data,
+      active: true,
+    });
+
+    return userRepository.createOne(user.object);
   }
 
-  private toModel(document: IUser): UsersModel {
-    return new UsersModel({
-      updatedAt: document.updatedAt,
-      createdAt: document.createdAt,
-      password: document.password,
-      email: document.email,
-      _id: document._id,
+  async findAll() {
+    return userRepository.findMany({
+      active: true,
     });
   }
 
-  async createUser(data: IUser): Promise<UsersModel | null> {
-    const document = await this.createOne(data);
+  async findById(id: string) {
+    const user = await userRepository.findById(id);
 
-    if (!document) return null;
-
-    return this.toModel(document);
-  }
-
-  async findAllUsers(): Promise<UsersModel[]> {
-    const documents = await this.findMany({});
-
-    return documents.map((document) => this.toModel(document));
-  }
-
-  async findUserById(id: string): Promise<UsersModel | null> {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return null;
+    if (!user) {
+      throw throwlhos.default.err_notFound("User not found");
     }
 
-    const document = await super.findById(id);
-
-    if (!document) return null;
-
-    return this.toModel(document);
+    return user;
   }
 
-  async findUserByEmail(email: string): Promise<UsersModel | null> {
-    const document = await this.findOne({ email });
+  async update(id: string, data: any) {
+    const user = await userRepository.updateOne(
+      {
+        _id: id,
+      },
+      data,
+    );
 
-    if (!document) return null;
-
-    return this.toModel(document);
-  }
-
-  async updateUser(
-    id: string,
-    data: Partial<IUser>,
-  ): Promise<UsersModel | null> {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return null;
+    if (!user) {
+      throw throwlhos.default.err_notFound("User not found");
     }
 
-    const document = await this.updateById(id, data);
-
-    if (!document) return null;
-
-    return this.toModel(document);
+    return user;
   }
 
-  async deleteUser(id: string): Promise<boolean> {
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return false;
+  async delete(id: string) {
+    const user = await userRepository.updateOne(
+      {
+        _id: id,
+      },
+      {
+        active: false,
+      },
+    );
+
+    if (!user) {
+      throw throwlhos.default.err_notFound("User not found");
     }
 
-    const document = await this.deleteById(id);
-
-    return !!document;
+    return user;
   }
 }
+
+export default new UsersService();

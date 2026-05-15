@@ -1,22 +1,40 @@
-import { Schema, model } from "mongoose";
+import { BaseRules } from "../../core/abstract/core.controller.ts";
 
-const UsersSchema = new Schema(
-  {
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+class UsersRules extends BaseRules {
+  create(data: any) {
+    this.validate(
+      {
+        field: "name",
+        value: data.name,
+        rules: ["required", "string"],
+      },
+      {
+        field: "email",
+        value: data.email,
+        rules: ["required", "email"],
+      },
+      {
+        field: "password",
+        value: data.password,
+        rules: ["required", "string"],
+      },
+    );
+  }
 
-    password: {
-      type: String,
-      required: true,
-      select: false,
-    },
-  },
-  {
-    timestamps: true,
-  },
-);
+  update(data: any) {
+    this.validate(
+      {
+        field: "name",
+        value: data.name,
+        rules: ["string"],
+      },
+      {
+        field: "email",
+        value: data.email,
+        rules: ["email"],
+      },
+    );
+  }
+}
 
-export const UsersMongoDB = model("users", UsersSchema);
+export default new UsersRules();
