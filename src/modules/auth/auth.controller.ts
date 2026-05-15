@@ -11,6 +11,13 @@ class AuthController {
 
     return res.status(200).json(result);
   }
+  async refresh(req: Request, res: Response) {
+    authRules.refresh(req.body);
+
+    const result = await authService.refresh(req.body.refreshToken);
+
+    return res.status(200).json(result);
+  }
 }
 
 export default new AuthController();
