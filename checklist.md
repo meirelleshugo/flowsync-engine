@@ -20,13 +20,13 @@
 ## 🧩 3. Entidade CRUD (Domínio)
 
 - [x] Definir entidade escolhida (ex: Usuários, Produtos, Tarefas, Planetas etc.)
-- [ ] Criar model/schema da entidade
-- [ ] Definir validações da entidade
-- [ ] Implementar Create (POST)
-- [ ] Implementar Read (GET all)
-- [ ] Implementar Read by ID (GET by id)
-- [ ] Implementar Update (PUT/PATCH)
-- [ ] Implementar Delete (DELETE)
+- [x] Criar model/schema da entidade
+- [x] Definir validações da entidade
+- [x] Implementar Create (POST)
+- [x] Implementar Read (GET all)
+- [x] Implementar Read by ID (GET by id)
+- [x] Implementar Update (PUT/PATCH)
+- [x] Implementar Delete (DELETE)
 - [ ] Validar entradas em todas as operações
 
 ## 🔐 4. Autenticação e Autorização (JWT)
@@ -41,9 +41,9 @@
 
 ## ⚙️ 5. Regras de Negócio e Transações
 
-- [ ] Implementar pelo menos 1 operação atômica com session/transaction no MongoDB
-- [ ] Criar cenário com dependência entre entidades (ex: criação dupla ou encadeada)
-- [ ] Garantir rollback em caso de falha
+- [x] Implementar pelo menos 1 operação atômica com session/transaction no MongoDB
+- [x] Criar cenário com dependência entre entidades (ex: criação dupla ou encadeada)
+- [x] Garantir rollback em caso de falha
 
 ## 🧪 6. Testes Automatizados
 
@@ -59,15 +59,15 @@
 ## 📦 7. Pacotes Obrigatórios
 
 - [x] Integrar responser (padronização de respostas)
-- [ ] Integrar request-check (validação de payloads)
+- [x] Integrar request-check (validação de payloads)
 - [x] Integrar morgan (logs de requisições)
-- [ ] Integrar isness (comparações de valores)
+- [x] Integrar isness (comparações de valores)
 - [x] Integrar throwlhos (tratamento padrão de erros)
 
 ## 🧾 8. Logs e Tratamento de Erros
 
 - [x] Configurar logs globais com morgan
-- [ ] Padronizar respostas com responser
+- [x] Padronizar respostas com responser
 - [x] Padronizar erros com throwlhos
 - [x] Garantir logs de todas as requisições
 - [ ] Garantir consistência de erros na API
