@@ -37,7 +37,7 @@
 - [x] Implementar middleware de autenticação (Bearer Token)
 - [x] Proteger pelo menos 1 endpoint com autenticação
 - [ ] Configurar token no Postman como variável reutilizável
-- [ ] (Opcional) Implementar refresh token
+- [x] (Opcional) Implementar refresh token
 
 ## ⚙️ 5. Regras de Negócio e Transações
 
@@ -95,9 +95,9 @@
 
 - [x] Código versionado no GitHub
 - [ ] Projeto funcionando 100%
-- [ ] CRUD completo da entidade
+- [x] CRUD completo da entidade
 - [x] Autenticação JWT funcional
-- [ ] Transação implementada
+- [x] Transação implementada
 - [ ] Testes completos passando
 - [ ] Documentação publicada
 - [ ] README completo
