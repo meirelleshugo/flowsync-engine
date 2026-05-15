@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-
 import authService from "./auth.service.ts";
 import authRules from "./auth.schema.ts";
 
