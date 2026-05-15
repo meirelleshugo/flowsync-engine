@@ -174,7 +174,7 @@ export default class CoreRepository<
   }
 
   updateById(
-    id: string | Types.ObjectId,
+    id: Types.ObjectId,
     update: UpdateQuery<T>,
     options?: MongooseUpdateQueryOptions,
   ) {
