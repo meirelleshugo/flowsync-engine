@@ -18,6 +18,7 @@
     "jsonwebtoken": "npm:jsonwebtoken@^9.0.3",
     "mongodb": "npm:mongodb@^7.2.0",
     "mongoose": "npm:mongoose@8.9.5",
+    "mongoose-aggregate-paginate-v2": "npm:mongoose-aggregate-paginate-v2@^1.1.4",
     "morgan": "npm:morgan@^1.10.1",
     "octokit": "npm:octokit@^5.0.5",
     "request-check": "npm:request-check@^1.6.2",
