@@ -161,7 +161,7 @@ export default class CoreRepository<
   ) {
     if (!is.objectId(id)) {
       throw throwlhos.default.err_internalServerError(
-        "updateByIdWithSession precisa de um ObjectId válido",
+        "updateByIdWithSession requires a valid ObjectId",
         { givenId: id, typeofGivenObjectId: typeof id },
       );
     }
