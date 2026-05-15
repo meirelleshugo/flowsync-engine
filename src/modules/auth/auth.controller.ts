@@ -1,38 +1,16 @@
-import type { NextFunction, Request, Response } from "express";
-import BaseRules from "../../core/abstract/core.controller.ts";
-import { AuthServiceImp } from "./index.ts";
-import AuthModel from "./auth.model.ts";
-import throwlhos from "throwlhos";
-import "responser";
+import { Request, Response } from "express";
 
-export default class AuthController extends BaseRules {
-  login = async (request: Request, response: Response, next: NextFunction) => {
-    const { email, password } = request.body;
+import authService from "./auth.service.ts";
+import authRules from "./auth.schema.ts";
 
-    try {
-      const invalids = this.rc.check({ email }, { password });
+class AuthController {
+  async login(req: Request, res: Response) {
+    authRules.login(req.body);
 
-      if (invalids) {
-        throw throwlhos.default.err_unprocessableEntity(
-          "Campos inválidos.",
-          invalids,
-        );
-      }
+    const result = await authService.login(req.body);
 
-      const auth = new AuthModel({
-        email: email.toString(),
-        password: password.toString(),
-      });
-
-      const token = await AuthServiceImp.login(auth);
-
-      return response.send_ok("Login realizado com sucesso!", {
-        token,
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
+    return res.status(200).json(result);
+  }
 }
 
-export const authController = new AuthController();
+export default new AuthController();

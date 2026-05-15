@@ -1,29 +1,44 @@
-import AuthRepository from "./auth.repository.ts";
-import UsersModel from "../users/users.model.ts";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import throwlhos from "throwlhos";
-import bcrypt from "bcryptjs";
 
-import { generateToken } from "../../core/utils/jwt.ts";
+import UserRepository from "../../models/user/UserRepository.ts";
 
-const repository = new AuthRepository();
+const userRepository = new UserRepository();
 
-export default class AuthService {
-  async login(auth: UsersModel): Promise<string> {
-    const user = await repository.findByEmail(auth);
+class AuthService {
+  async login(data: any) {
+    const user = await userRepository.findOne({
+      email: data.email,
+      active: true,
+    });
 
     if (!user) {
-      throw throwlhos.default.err_unauthorized("Usuário não encontrado.");
+      throw throwlhos.default.err_unauthorized("Invalid credentials");
     }
 
-    const isValidPassword = await bcrypt.compare(auth.password, user.password);
+    const passwordIsValid = await bcrypt.compare(data.password, user.password);
 
-    if (!isValidPassword) {
-      throw throwlhos.default.err_unauthorized("Senha inválida.");
+    if (!passwordIsValid) {
+      throw throwlhos.default.err_unauthorized("Invalid credentials");
     }
 
-    return generateToken({
-      id: user.id,
-      email: user.email,
-    });
+    const token = jwt.sign(
+      {
+        id: user._id,
+        email: user.email,
+      },
+      Deno.env.get("JWT_SECRET")!,
+      {
+        expiresIn: "1d",
+      },
+    );
+
+    return {
+      user,
+      token,
+    };
   }
 }
+
+export default new AuthService();

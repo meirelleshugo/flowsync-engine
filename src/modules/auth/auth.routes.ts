@@ -1,5 +1,6 @@
-import { authController } from "./auth.controller.ts";
 import { Router } from "express";
+
+import controller from "./auth.controller.ts";
 
 const router = Router();
 
@@ -58,6 +59,6 @@ const router = Router();
  *       500:
  *         description: Internal server error
  */
-router.post("/login", authController.login);
+router.post("/login", controller.login);
 
 export default router;

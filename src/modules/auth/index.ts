@@ -1,3 +1,3 @@
-import AuthService from "./auth.service.ts";
+import routes from "./auth.routes.ts";
 
-export const AuthServiceImp = new AuthService();
+export default routes;
