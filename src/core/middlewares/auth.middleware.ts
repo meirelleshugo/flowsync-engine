@@ -13,7 +13,7 @@ export default function authMiddleware(
     const bearer = request.headers.authorization;
 
     if (!bearer) {
-      throw throwlhos.default.err_unauthorized("Token não informado.");
+      throw throwlhos.default.err_unauthorized("Token not provided.");
     }
 
     const token = bearer.split(" ")[1];
@@ -24,6 +24,6 @@ export default function authMiddleware(
 
     next();
   } catch {
-    next(throwlhos.default.err_unauthorized("Token inválido."));
+    next(throwlhos.default.err_unauthorized("Invalid token."));
   }
 }
