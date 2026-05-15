@@ -18,9 +18,7 @@ class AuthRules extends BaseRules {
   refresh(data: any) {
     this.validate({
       field: "refreshToken",
-
       value: data.refreshToken,
-
       rules: ["required", "string"],
     });
   }

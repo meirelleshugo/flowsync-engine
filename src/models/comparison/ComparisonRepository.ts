@@ -1,9 +1,7 @@
-import mongoose from "mongoose";
-
-import CoreRepository from "../../core/abstract/core.repository.ts";
 import { BaseSchema, $def } from "../../core/abstract/core.schema.ts";
-
+import CoreRepository from "../../core/abstract/core.repository.ts";
 import { IComparison } from "./IComparison.ts";
+import mongoose from "mongoose";
 
 class ComparisonSchema extends BaseSchema {
   constructor() {

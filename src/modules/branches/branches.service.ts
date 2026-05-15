@@ -1,9 +1,7 @@
-import throwlhos from "throwlhos";
-
-import Branch from "../../models/branch/Branch.ts";
-
 import BranchRepository from "../../models/branch/BranchRepository.ts";
 import RepoRepository from "../../models/repository/RepoRepository.ts";
+import Branch from "../../models/branch/Branch.ts";
+import throwlhos from "throwlhos";
 
 const branchRepository = new BranchRepository();
 const repoRepository = new RepoRepository();

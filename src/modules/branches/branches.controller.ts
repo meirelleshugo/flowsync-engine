@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
-
 import branchesService from "./branches.service.ts";
 import branchesRules from "./branches.schema.ts";
+import { Request, Response } from "express";
 
 class BranchesController {
   async create(req: Request, res: Response) {

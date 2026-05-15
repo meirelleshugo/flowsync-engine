@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
-
 import commitsService from "./commits.service.ts";
 import commitsRules from "./commits.schema.ts";
+import { Request, Response } from "express";
 
 class CommitsController {
   async create(req: Request, res: Response) {

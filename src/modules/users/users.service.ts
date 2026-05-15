@@ -1,7 +1,6 @@
-import throwlhos from "throwlhos";
-
-import User from "../../models/user/User.ts";
 import UserRepository from "../../models/user/UserRepository.ts";
+import User from "../../models/user/User.ts";
+import throwlhos from "throwlhos";
 
 const userRepository = new UserRepository();
 

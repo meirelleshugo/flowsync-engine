@@ -1,9 +1,7 @@
-import mongoose from "mongoose";
-
-import CoreRepository from "../../core/abstract/core.repository.ts";
 import { BaseSchema, $def } from "../../core/abstract/core.schema.ts";
-
+import CoreRepository from "../../core/abstract/core.repository.ts";
 import { ICommit } from "./ICommit.ts";
+import mongoose from "mongoose";
 
 class CommitSchema extends BaseSchema {
   constructor() {

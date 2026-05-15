@@ -1,5 +1,4 @@
 import CoreModel from "../../core/abstract/core.model.ts";
-
 import { ICommit } from "./ICommit.ts";
 
 export default class Commit extends CoreModel<ICommit> {

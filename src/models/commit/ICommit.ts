@@ -1,5 +1,5 @@
-import { Types } from "mongoose";
 import { ICore } from "../../core/abstract/core.model.ts";
+import { Types } from "mongoose";
 
 export interface ICommit extends ICore {
   message: string;

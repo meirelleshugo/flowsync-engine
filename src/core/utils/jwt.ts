@@ -1,6 +1,5 @@
-import jwt from "jsonwebtoken";
-
 import { JwtConfig } from "../../config/jwt.ts";
+import jwt from "jsonwebtoken";
 
 export function generateToken(payload: object): string {
   return jwt.sign(payload, JwtConfig.secret, {

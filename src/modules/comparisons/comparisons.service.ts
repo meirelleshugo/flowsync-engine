@@ -1,19 +1,15 @@
-import mongoose from "mongoose";
-import throwlhos from "throwlhos";
-
-import Comparison from "../../models/comparison/Comparison.ts";
-
 import ComparisonRepository from "../../models/comparison/ComparisonRepository.ts";
-
 import RepoRepository from "../../models/repository/RepoRepository.ts";
 import BranchRepository from "../../models/branch/BranchRepository.ts";
 import CommitRepository from "../../models/commit/CommitRepository.ts";
+import Comparison from "../../models/comparison/Comparison.ts";
+import throwlhos from "throwlhos";
+import mongoose from "mongoose";
 
 const comparisonRepository = new ComparisonRepository();
-
-const repoRepository = new RepoRepository();
-const branchRepository = new BranchRepository();
 const commitRepository = new CommitRepository();
+const branchRepository = new BranchRepository();
+const repoRepository = new RepoRepository();
 
 class ComparisonsService {
   async compare(data: any) {

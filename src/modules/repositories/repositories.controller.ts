@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
-
 import repositoriesService from "./repositories.service.ts";
 import repositoriesRules from "./repositories.schema.ts";
+import { Request, Response } from "express";
 
 class RepositoriesController {
   async create(req: Request, res: Response) {

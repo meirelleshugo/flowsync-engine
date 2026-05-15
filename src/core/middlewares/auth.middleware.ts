@@ -1,8 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
-
-import throwlhos from "throwlhos";
-
 import { verifyToken } from "../utils/jwt.ts";
+import throwlhos from "throwlhos";
 
 export default function authMiddleware(
   request: Request,

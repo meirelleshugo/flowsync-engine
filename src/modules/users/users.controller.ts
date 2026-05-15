@@ -1,6 +1,5 @@
-import { Request, Response } from "express";
-
 import usersService from "./users.service.ts";
+import { Request, Response } from "express";
 import usersRules from "./users.schema.ts";
 
 class UsersController {

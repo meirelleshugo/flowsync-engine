@@ -1,8 +1,6 @@
-import { Router } from "express";
-
-import controller from "./repositories.controller.ts";
-
 import authMiddleware from "../../core/middlewares/auth.middleware.ts";
+import controller from "./repositories.controller.ts";
+import { Router } from "express";
 
 const router = Router();
 

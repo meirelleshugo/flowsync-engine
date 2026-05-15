@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import { $def, BaseSchema } from "../../core/abstract/core.schema.ts";
 import CoreRepository from "../../core/abstract/core.repository.ts";
-import { BaseSchema, $def } from "../../core/abstract/core.schema.ts";
 import { IBranch } from "./IBranch.ts";
+import mongoose from "mongoose";
 
 class BranchSchema extends BaseSchema {
   constructor() {

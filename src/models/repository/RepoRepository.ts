@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import CoreRepository from "../../core/abstract/core.repository.ts";
 import { BaseSchema, $def } from "../../core/abstract/core.schema.ts";
+import CoreRepository from "../../core/abstract/core.repository.ts";
 import { IRepo } from "./IRepo.ts";
+import mongoose from "mongoose";
 
 class RepoSchema extends BaseSchema {
   constructor() {

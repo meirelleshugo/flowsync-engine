@@ -1,6 +1,6 @@
-import dayjs from "https://esm.sh/dayjs@1.11.13";
-import utc from "https://esm.sh/dayjs@1.11.13/plugin/utc";
 import timezone from "https://esm.sh/dayjs@1.11.13/plugin/timezone";
+import utc from "https://esm.sh/dayjs@1.11.13/plugin/utc";
+import dayjs from "https://esm.sh/dayjs@1.11.13";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

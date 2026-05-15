@@ -1,7 +1,6 @@
-import { Request, Response } from "express";
-
 import comparisonsService from "./comparisons.service.ts";
 import comparisonsRules from "./comparisons.schema.ts";
+import { Request, Response } from "express";
 
 class ComparisonsController {
   async compare(req: Request, res: Response) {

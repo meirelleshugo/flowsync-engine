@@ -1,5 +1,4 @@
 import CoreModel from "../../core/abstract/core.model.ts";
-
 import { IComparison } from "./IComparison.ts";
 
 export default class Comparison extends CoreModel<IComparison> {

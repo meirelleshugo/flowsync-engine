@@ -1,10 +1,8 @@
-import throwlhos from "throwlhos";
-
-import Commit from "../../models/commit/Commit.ts";
-
 import CommitRepository from "../../models/commit/CommitRepository.ts";
-import RepoRepository from "../../models/repository/RepoRepository.ts";
 import BranchRepository from "../../models/branch/BranchRepository.ts";
+import RepoRepository from "../../models/repository/RepoRepository.ts";
+import Commit from "../../models/commit/Commit.ts";
+import throwlhos from "throwlhos";
 
 const commitRepository = new CommitRepository();
 

@@ -1,13 +1,12 @@
+import aggregatePaginate from "mongoose-aggregate-paginate-v2";
+import { Time } from "../utils/time.ts";
+import is from "@zarco/isness";
 import mongoose, {
-  Schema,
   SchemaDefinition,
   SchemaOptions,
+  Schema,
   Types,
 } from "mongoose";
-import { Time } from "../utils/time.ts";
-
-import aggregatePaginate from "mongoose-aggregate-paginate-v2";
-import is from "jsr:@zarco/isness";
 
 export const required = (message: string) =>
   [true, message] as [boolean, string];

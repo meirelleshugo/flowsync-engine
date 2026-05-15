@@ -76,13 +76,11 @@ class AuthService {
 
     const storedToken = await refreshTokenRepository.findOne({
       token: refreshToken,
-
       revoked: false,
     });
 
-    if (!storedToken) {
+    if (!storedToken)
       throw throwlhos.default.err_unauthorized("Invalid refresh token");
-    }
 
     const accessToken = jwt.sign(
       {

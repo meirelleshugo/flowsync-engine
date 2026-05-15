@@ -1,39 +1,30 @@
-import mongoose from "mongoose";
-
-import CoreRepository from "../../core/abstract/core.repository.ts";
-
 import { BaseSchema, $def } from "../../core/abstract/core.schema.ts";
-
+import CoreRepository from "../../core/abstract/core.repository.ts";
 import { IRefreshToken } from "./IRefreshToken.ts";
+import mongoose from "mongoose";
 
 class RefreshTokenSchema extends BaseSchema {
   constructor() {
     super({
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-
         ref: "users",
-
         required: $def.required(),
       },
 
       token: {
         type: String,
-
         required: $def.required(),
-
         unique: true,
       },
 
       expiresAt: {
         type: Date,
-
         required: $def.required(),
       },
 
       revoked: {
         type: Boolean,
-
         default: false,
       },
     });

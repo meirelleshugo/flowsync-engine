@@ -1,7 +1,6 @@
-import throwlhos from "throwlhos";
-
-import Repo from "../../models/repository/Repo.ts";
 import RepoRepository from "../../models/repository/RepoRepository.ts";
+import Repo from "../../models/repository/Repo.ts";
+import throwlhos from "throwlhos";
 
 const repoRepository = new RepoRepository();
 
