@@ -1,28 +1,22 @@
 import errorMiddleware from "./core/middlewares/error.middleware.ts";
-import usersRoutes from "./modules/users/users.routes.ts";
-import authRoutes from "./modules/auth/auth.routes.ts";
+import repositoriesModule from "./modules/repositories/index.ts";
+import comparisonsModule from "./modules/comparisons/index.ts";
+import branchesModule from "./modules/branches/index.ts";
 import { swaggerUi, specs } from "./config/swagger.ts";
+import commitsModule from "./modules/commits/index.ts";
+import usersModule from "./modules/users/index.ts";
+import authModule from "./modules/auth/index.ts";
 import responser from "responser";
 import express from "express";
 import morgan from "morgan";
 
 const app = express();
 
-app.use(express.json());
-app.use(responser.default);
-app.use(express.static("public"));
-
-/**
- * LOGS
- */
-
-app.use(morgan("dev"));
-
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
-
-/**
- * HEALTH CHECK
- */
+app.use(express.static("public"));
+app.use(responser.default);
+app.use(express.json());
+app.use(morgan("dev"));
 
 /**
  * @swagger
@@ -40,18 +34,15 @@ app.get("/", (_request, response) => {
   });
 });
 
-/**
- * ROUTES
- */
+// Routes
+app.use("/repositories", repositoriesModule);
+app.use("/comparisons", comparisonsModule);
+app.use("/branches", branchesModule);
+app.use("/commits", commitsModule);
+app.use("/users", usersModule);
+app.use("/auth", authModule);
 
-app.use("/auth", authRoutes);
-
-app.use("/users", usersRoutes);
-
-/**
- * ERROR MIDDLEWARE
- */
-
+// Error Middleware
 app.use(errorMiddleware);
 
 export default app;
