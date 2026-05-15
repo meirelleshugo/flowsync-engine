@@ -12,9 +12,7 @@ class RepositoriesService {
     });
 
     if (alreadyExists) {
-      throw throwlhos.default.err_conflict(
-        "Repository already exists",
-      );
+      throw throwlhos.default.err_conflict("Repository already exists");
     }
 
     const repo = new Repo({
@@ -35,9 +33,7 @@ class RepositoriesService {
     const repository = await repoRepository.findById(id);
 
     if (!repository) {
-      throw throwlhos.default.err_notFound(
-        "Repository not found",
-      );
+      throw throwlhos.default.err_notFound("Repository not found");
     }
 
     return repository;
@@ -52,9 +48,7 @@ class RepositoriesService {
     );
 
     if (!repository) {
-      throw throwlhos.default.err_notFound(
-        "Repository not found",
-      );
+      throw throwlhos.default.err_notFound("Repository not found");
     }
 
     return repository;
@@ -71,9 +65,7 @@ class RepositoriesService {
     );
 
     if (!repository) {
-      throw throwlhos.default.err_notFound(
-        "Repository not found",
-      );
+      throw throwlhos.default.err_notFound("Repository not found");
     }
 
     return repository;
